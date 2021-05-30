@@ -47,9 +47,7 @@ def lowest_std_std() -> str:
 	ret = str()
 	double_std = math.inf
 	for i, c in enumerate(course_list):
-		print(f'i is {i}, c is {c}, len courses[h] is {len(courses["Gryffindor"])}')
-		print(courses["Gryffindor"][i].getvalue('Std'))
-		stds = [courses[h][i].getvalue('Std') for h in houses]
+		stds = [courses[h][c].getvalue('Std') for h in houses]
 		mean = sum(stds) / len(stds)
 		std_of_stds = math.sqrt(sum([(std - mean) ** 2 for std in stds]))
 		if std_of_stds < double_std:
@@ -61,19 +59,16 @@ def lowest_std_std() -> str:
 courses = {}
 course_list = set()
 for house in houses:
-	courses[house] = list()
+	courses[house] = dict()
 	for name, dtype in houses[house].dtypes.iteritems():
 		if dtype == np.float64:
 			course_list.add(name)
-			column = [float(x) for x in data[name].values if not math.isnan(x)]
-			courses[house].append(Feature(name, column))
-	print(house)
+			column = [float(x) for x in houses[house][name].values if not math.isnan(x)]
+			courses[house][name] = Feature(name, column)
 
 lowest = lowest_std_std()
 
 for house in houses:
 	plt.hist(houses[house][lowest], density=True, label=house, bins=30)
-
 plt.title(lowest)
-
 plt.show()
