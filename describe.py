@@ -25,7 +25,7 @@ class Feature:
 		col.sort()
 		self.min, self.max = col[0], col[-1]
 		self.p25, self.p50, self.p75 = col[int(len(col) / 4)], col[int(len(col) / 2)], col[int(len(col) / 4 * 3)]
-		self.std = math.sqrt(sum([float((float(x) - self.mean) ** 2) for x in col]))
+		self.std = math.sqrt(sum([float((float(x) - self.mean) ** 2) for x in col]) / len(col))
 
 	def getvalue(self, val):
 		return {
@@ -42,7 +42,7 @@ class Feature:
 
 
 for name, dtype in data.dtypes.iteritems():
-	if dtype == np.float64:
+	if dtype == np.float64 and name != 'Hogwarts House':
 		column = [float(x) for x in data[name].values if not math.isnan(x)]
 		features.append(Feature(name, column))
 
