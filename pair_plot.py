@@ -61,9 +61,9 @@ for row_plt, row_course in zip(axes, course_list):
 	for col_plt, col_course in zip(row_plt, course_list):
 		for house in houses:
 			if row_course != col_course:
-				col_plt.scatter(houses[house][col_course], houses[house][row_course])
+				col_plt.scatter(houses[house][col_course], houses[house][row_course], alpha=0.4)
 			else:
-				col_plt.hist(houses[house][row_course], density=True, label=house, bins=30)
+				col_plt.hist(houses[house][row_course], density=True, label=house, bins=30, alpha=0.5)
 		col_plt.tick_params(labelbottom=False, labelleft=False)
 
 		if col_plt.is_first_col():

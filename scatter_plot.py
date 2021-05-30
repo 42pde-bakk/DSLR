@@ -54,7 +54,7 @@ for house in houses:
 			courses[house][name] = Feature(name, column)
 
 for house in houses:
-	plt.scatter(houses[house]["Defense Against the Dark Arts"], houses[house]["Astronomy"])
+	plt.scatter(houses[house]["Defense Against the Dark Arts"], houses[house]["Astronomy"], alpha=0.4)
 
 plt.xlabel("Defense Against the Dark Arts")
 plt.ylabel("Astronomy")

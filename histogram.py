@@ -69,6 +69,6 @@ for house in houses:
 lowest = lowest_std_std()
 
 for house in houses:
-	plt.hist(houses[house][lowest], density=True, label=house, bins=30)
+	plt.hist(houses[house][lowest], density=True, label=house, bins=30, alpha=0.5)
 plt.title(lowest)
 plt.show()
