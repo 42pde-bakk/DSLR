@@ -3,6 +3,7 @@ import sys
 import numpy as np
 import math
 import os
+import matplotlib.pyplot as plt
 
 if len(sys.argv) != 2:
 	print(f'Please provide one parameter with the csv file.')
@@ -13,7 +14,8 @@ if extension != '.csv' or not os.path.exists(sys.argv[1]):
 	print(f'Please provide a valid .csv file.')
 	quit()
 
-data = pd.read_csv(sys.argv[1])
+data = pd.read_csv(sys.argv[1], index_col=0)
+houses = {x: pd.DataFrame(y) for x, y in data.groupby('Hogwarts House', as_index=False)}
 features = list()
 
 
@@ -41,17 +43,21 @@ class Feature:
 		}[val]
 
 
-for name, dtype in data.dtypes.iteritems():
-	if dtype == np.float64 and name != 'Hogwarts House':
-		column = [float(x) for x in data[name].values if not math.isnan(x)]
-		features.append(Feature(name, column))
+courses = {}
+course_list = set()
+for house in houses:
+	courses[house] = dict()
+	for name, dtype in houses[house].dtypes.iteritems():
+		if dtype == np.float64:
+			course_list.add(name)
+			column = [float(x) for x in houses[house][name].values if not math.isnan(x)]
+			courses[house][name] = Feature(name, column)
 
-longest_name = max([len(feature.getvalue('')) for feature in features])
+for house in houses:
+	plt.scatter(houses[house]["Defense Against the Dark Arts"], houses[house]["Astronomy"])
 
-rows = ["", "Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]
+plt.xlabel("Defense Against the Dark Arts")
+plt.ylabel("Astronomy")
+plt.legend(houses.keys())
 
-for row in rows:
-	print(row.ljust(longest_name), end=' ')
-	for f in features:
-		print(str(f.getvalue(row)).ljust(longest_name), end=' ')
-	print("")
+plt.show()
