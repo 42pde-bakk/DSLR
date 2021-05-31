@@ -66,10 +66,10 @@ for row_plt, row_course in zip(axes, course_list):
 				col_plt.hist(houses[house][row_course], density=True, label=house, bins=30, alpha=0.5)
 		col_plt.tick_params(labelbottom=False, labelleft=False)
 
-		if col_plt.is_first_col():
+		if col_plt.get_subplotspec().is_first_col():
 			col_plt.set_ylabel(row_course.replace(' ', '\n'))
 
-		if col_plt.is_last_row():
+		if col_plt.get_subplotspec().is_last_row():
 			col_plt.set_xlabel(col_course.replace(' ', '\n'))
 
 plt.legend(houses.keys())
