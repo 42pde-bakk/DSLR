@@ -26,10 +26,10 @@ if extension != '.csv' or not os.path.exists(sys.argv[1]):
 	quit()
 
 df = pd.read_csv(sys.argv[1], index_col=0)
-df.dropna(subset=['Defense Against the Dark Arts', 'Charms', 'Herbology', 'Divination', 'Muggle Studies'], inplace=True)
+df.fillna(0, inplace=True)  # Fill all NaN's with 0's
 
-X = np.array(df.values[:, [7, 8, 9]], dtype=float)
-y = df.values[:, 0]
+X = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Course score to train the model on
+y = df.values[:, 0]   # Hogwarts House
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4)
 
@@ -37,7 +37,6 @@ LogReg = LogisticRegression()
 LogReg.fit(X_train, y_train)
 
 y_pred = LogReg.predict(X_test)
-print(y_pred)
 
 print_result()
 

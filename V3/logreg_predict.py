@@ -15,9 +15,9 @@ if extension != '.csv' or not os.path.exists(sys.argv[1]):
 
 df = pd.read_csv(sys.argv[1], index_col=0)
 
-df = df.fillna(method='ffill')
-X = np.array(df.values[:, [7, 8, 9]], dtype=float)
-y = df.values[:, 0]
+df.fillna(method='ffill', inplace=True)
+X = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Hogwarts course score to predict Hogwarts house
+y = df.values[:, 0]  # Hogwarts House
 
 LogReg = pickle.load(open('datasets/weights', 'rb'))
 
