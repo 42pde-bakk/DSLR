@@ -4,7 +4,6 @@ import pandas as pd
 import sys
 import numpy as np
 import math
-import os
 import matplotlib.pyplot as plt
 
 
@@ -28,12 +27,7 @@ def show_histogram(houses, lowest):
 	plt.show()
 
 
-def main():
-	check_input(sys.argv)
-
-	data = pd.read_csv(sys.argv[1], index_col=0)
-	houses = {x: pd.DataFrame(y) for x, y in data.groupby('Hogwarts House', as_index=False)}
-
+def create_courses_dict(houses):
 	courses = dict()
 	course_list = set()
 	for house in houses:
@@ -43,6 +37,16 @@ def main():
 				course_list.add(name)
 				column = [float(x) for x in houses[house][name].values if not math.isnan(x)]
 				courses[house][name] = Feature(name, column)
+	return courses, course_list
+
+
+def main():
+	check_input(sys.argv)
+
+	data = pd.read_csv(sys.argv[1], index_col=0)
+	houses = {x: pd.DataFrame(y) for x, y in data.groupby('Hogwarts House', as_index=False)}
+
+	courses, course_list = create_courses_dict(houses)
 
 	lowest = lowest_std_std(course_list, courses, houses)
 	show_histogram(houses, lowest)
