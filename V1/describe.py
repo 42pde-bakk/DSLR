@@ -6,6 +6,15 @@ import numpy as np
 import math
 
 
+def print_formatted(features):
+	longest_name = max([len(feature.getvalue('')) for feature in features])
+	for row in ["", "Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]:
+		print(row.ljust(longest_name), end=' ')
+		for f in features:
+			print(str(f.getvalue(row)).ljust(longest_name), end=' ')
+		print()
+
+
 def main():
 	check_input(sys.argv)
 
@@ -17,14 +26,7 @@ def main():
 			# House check is because if Hogwarts House is empty, it's also seen as a float64
 			column = [float(x) for x in data[name].values if not math.isnan(x)]
 			features.add(Feature(name, column))
-
-	longest_name = max([len(feature.getvalue('')) for feature in features])
-
-	for row in ["", "Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]:
-		print(row.ljust(longest_name), end=' ')
-		for f in features:
-			print(str(f.getvalue(row)).ljust(longest_name), end=' ')
-		print()
+	print_formatted(features)
 
 
 if __name__ == "__main__":
