@@ -7,12 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def main():
-	check_input(sys.argv)
-
-	data = pd.read_csv(sys.argv[1], index_col=0)
-	houses = {x: pd.DataFrame(y) for x, y in data.groupby('Hogwarts House', as_index=False)}
-
+def create_dict(houses) -> tuple:
 	courses = {}
 	course_list = set()
 	for house in houses:
@@ -22,7 +17,10 @@ def main():
 				course_list.add(name)
 				column = [float(x) for x in houses[house][name].values if not math.isnan(x)]
 				courses[house][name] = Feature(name, column)
+	return courses, course_list
 
+
+def plot(houses, course_list):
 	plt.close('all')
 
 	figure, axes = plt.subplots(len(course_list), len(course_list), figsize=(24, 14))
@@ -44,6 +42,16 @@ def main():
 	plt.legend(houses.keys())
 
 	plt.show()
+
+
+def main():
+	check_input(sys.argv)
+
+	data = pd.read_csv(sys.argv[1], index_col=0)
+	houses = {x: pd.DataFrame(y) for x, y in data.groupby('Hogwarts House', as_index=False)}
+
+	courses, course_list = create_dict(houses)
+	plot(houses, course_list)
 
 
 if __name__ == '__main__':
