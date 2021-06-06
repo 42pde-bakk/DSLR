@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 import pickle
 
 
-def print_result():
+def print_result(y_test, y_pred):
 	correct = 0
 	for test, pred in zip(y_test, y_pred):
 		if test == pred:
@@ -15,21 +15,29 @@ def print_result():
 	print(f'Got {correct}/{len(y_test)} correct!')
 
 
-check_input(sys.argv)
+def save_weights(logreg):
+	pickle.dump(logreg, open('datasets/weights', 'wb'))
 
-df = pd.read_csv(sys.argv[1], index_col=0)
-df.fillna(0, inplace=True)  # Fill all NaN's with 0's
 
-X = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Course score to train the model on
-y = df.values[:, 0]   # Hogwarts House
+def main():
+	check_input(sys.argv)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4)
+	df = pd.read_csv(sys.argv[1], index_col=0)
+	df.fillna(0, inplace=True)  # Fill all NaN's with 0's
 
-LogReg = LogisticRegression()
-LogReg.fit(X_train, y_train)
+	X = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Course score to train the model on
+	y = df.values[:, 0]   # Hogwarts House
 
-y_pred = LogReg.predict(X_test)
+	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4)
 
-print_result()
+	LogReg = LogisticRegression(max_iter=1000)
+	LogReg.fit(X_train, y_train)
 
-pickle.dump(LogReg, open('datasets/weights', 'wb'))
+	y_pred = LogReg.predict(X_test)
+
+	print_result(y_test, y_pred)
+	save_weights(LogReg)
+
+
+if __name__ == '__main__':
+	main()
