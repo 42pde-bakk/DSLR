@@ -1,14 +1,13 @@
-from pydataset import data
+from pkgs.parsing import check_input
 import pandas as pd
 import numpy as np
 import sys
-import os
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 import pickle
 
 
-def print_result():
+def print_result(y_test, y_pred):
 	correct = 0
 	for test, pred in zip(y_test, y_pred):
 		if test == pred:
@@ -16,28 +15,29 @@ def print_result():
 	print(f'Got {correct}/{len(y_test)} correct!')
 
 
-if len(sys.argv) != 2:
-	print(f'Please provide one parameter with the csv file.')
-	quit()
+def save_weights(logreg):
+	pickle.dump(logreg, open('datasets/weights', 'wb'))
 
-filename, extension = os.path.splitext(sys.argv[1])
-if extension != '.csv' or not os.path.exists(sys.argv[1]):
-	print(f'Please provide a valid .csv file.')
-	quit()
 
-df = pd.read_csv(sys.argv[1], index_col=0)
-df.fillna(0, inplace=True)  # Fill all NaN's with 0's
+def main():
+	check_input(sys.argv)
 
-X = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Course score to train the model on
-y = df.values[:, 0]   # Hogwarts House
+	df = pd.read_csv(sys.argv[1], index_col=0)
+	df.fillna(0, inplace=True)  # Fill all NaN's with 0's
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4)
+	X = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Course score to train the model on
+	y = df.values[:, 0]   # Hogwarts House
 
-LogReg = LogisticRegression()
-LogReg.fit(X_train, y_train)
+	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4)
 
-y_pred = LogReg.predict(X_test)
+	LogReg = LogisticRegression(max_iter=1000)
+	LogReg.fit(X_train, y_train)
 
-print_result()
+	y_pred = LogReg.predict(X_test)
 
-pickle.dump(LogReg, open('datasets/weights', 'wb'))
+	print_result(y_test, y_pred)
+	save_weights(LogReg)
+
+
+if __name__ == '__main__':
+	main()
