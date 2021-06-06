@@ -5,22 +5,27 @@ import sys
 import numpy as np
 import math
 
-check_input(sys.argv)
 
-data = pd.read_csv(sys.argv[1])
-features = list()
+def main():
+	check_input(sys.argv)
 
-for name, dtype in data.dtypes.iteritems():
-	if dtype == np.float64 and name != 'Hogwarts House':
-		column = [float(x) for x in data[name].values if not math.isnan(x)]
-		features.append(Feature(name, column))
+	data = pd.read_csv(sys.argv[1])
+	features = set()
 
-longest_name = max([len(feature.getvalue('')) for feature in features])
+	for name, dtype in data.dtypes.iteritems():
+		if dtype == np.float64 and name != 'Hogwarts House':
+			# House check is because if Hogwarts House is empty, it's also seen as a float64
+			column = [float(x) for x in data[name].values if not math.isnan(x)]
+			features.add(Feature(name, column))
 
-rows = ["", "Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]
+	longest_name = max([len(feature.getvalue('')) for feature in features])
 
-for row in rows:
-	print(row.ljust(longest_name), end=' ')
-	for f in features:
-		print(str(f.getvalue(row)).ljust(longest_name), end=' ')
-	print("")
+	for row in ["", "Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]:
+		print(row.ljust(longest_name), end=' ')
+		for f in features:
+			print(str(f.getvalue(row)).ljust(longest_name), end=' ')
+		print()
+
+
+if __name__ == "__main__":
+	main()
