@@ -9,6 +9,9 @@ def write_to_csv(y_pred):
 	with open('datasets/houses.csv', 'w+') as f:
 		f.write('Index,Hogwarts House\n')
 		for i in range(len(y_pred)):
+			# You can't have a space after the comma.
+			# evaluate.py just splits on the comma and sees every char after it as your prediction.
+			# And 'Gryffindor' != ' Gryffindor'
 			f.write(f'{i},{y_pred[i]}\n')
 
 
