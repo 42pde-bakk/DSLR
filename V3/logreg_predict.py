@@ -9,7 +9,7 @@ def write_to_csv(y_pred):
 	with open('datasets/houses.csv', 'w+') as f:
 		f.write('Index,Hogwarts House\n')
 		for i in range(len(y_pred)):
-			f.write(f'{i}, {y_pred[i]}\n')
+			f.write(f'{i},{y_pred[i]}\n')
 
 
 def main():
