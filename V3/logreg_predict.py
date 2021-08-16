@@ -21,12 +21,11 @@ def main():
 	df = pd.read_csv(sys.argv[1], index_col=0)
 
 	df.fillna(method='ffill', inplace=True)
-	X = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Hogwarts course score to predict Hogwarts house
-	y = df.values[:, 0]  # Hogwarts House
+	x = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Hogwarts course score to predict Hogwarts house
 
-	LogReg = pickle.load(open('datasets/weights', 'rb'))
+	log_reg = pickle.load(open('datasets/weights', 'rb'))
 
-	y_pred = LogReg.predict(X)
+	y_pred = log_reg.predict(x)
 
 	write_to_csv(y_pred)
 

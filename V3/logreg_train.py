@@ -25,18 +25,18 @@ def main():
 	df = pd.read_csv(sys.argv[1], index_col=0)
 	df.fillna(0, inplace=True)  # Fill all NaN's with 0's
 
-	X = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Course score to train the model on
+	x = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Course score to train the model on
 	y = df.values[:, 0]   # Hogwarts House
 
-	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4)
+	x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=4)
 
-	LogReg = LogisticRegression(max_iter=1000)
-	LogReg.fit(X_train, y_train)
+	log_reg = LogisticRegression(max_iter=1000)
+	log_reg.fit(x_train, y_train)
 
-	y_pred = LogReg.predict(X_test)
+	y_pred = log_reg.predict(x_test)
 
 	print_result(y_test, y_pred)
-	save_weights(LogReg)
+	save_weights(log_reg)
 
 
 if __name__ == '__main__':
