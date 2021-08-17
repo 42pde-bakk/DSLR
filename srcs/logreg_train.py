@@ -30,13 +30,16 @@ def main():
 
 	x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=4)
 
-	log_reg = LogisticRegression(max_iter=1000)
-	log_reg.fit(x_train, y_train)
+	# Documentation on the solvers:
+	# https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
+	# https://towardsdatascience.com/dont-sweat-the-solver-stuff-aea7cddc3451
+	model = LogisticRegression(max_iter=10400, solver='liblinear')
+	model.fit(x_train, y_train)
 
-	y_pred = log_reg.predict(x_test)
+	y_pred = model.predict(x_test)
 
 	print_result(y_test, y_pred)
-	save_weights(log_reg)
+	save_weights(model)
 
 
 if __name__ == '__main__':
