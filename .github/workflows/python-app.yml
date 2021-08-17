@@ -40,5 +40,5 @@ jobs:
         python3 srcs/scatter_plot.py datasets/dataset_train.csv && echo "scatter plot ran succesfully!"
         python3 srcs/pair_plot.py datasets/dataset_train.csv && echo "pair plot ran succesfully!"
         python3 srcs/logreg_train.py datasets/dataset_train.csv && echo "Trained model succesfully!"
-        python3 srcs/logreg_predict.py datasets/dataset_test.csv && echo "Succesfully submitted predictions!"
+        python3 srcs/logreg_predict.py datasets/dataset_test.csv datasets/weights && echo "Succesfully submitted predictions!"
         python3 secret/evaluate.py
