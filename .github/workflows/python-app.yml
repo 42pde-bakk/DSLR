@@ -36,9 +36,9 @@ jobs:
         # pytest # Idk how pytest works and I like the green checkmark
         # I'm just gonna run all my scripts here to see if they fail or not.
         python3 srcs/describe.py datasets/dataset_train.csv
-        python3 srcs/histogram.py datasets/dataset_train.csv
-        python3 srcs/scatter_plot.py datasets/dataset_train.csv
-        python3 srcs/pair_plot.py datasets/dataset_train.csv
-        python3 srcs/logreg_train.py datasets/dataset_train.csv
-        python3 srcs/logreg_predict.py datasets/dataset_test.csv
+        python3 srcs/histogram.py datasets/dataset_train.csv && echo "histogram ran succesfully!"
+        python3 srcs/scatter_plot.py datasets/dataset_train.csv && echo "scatter plot ran succesfully!"
+        python3 srcs/pair_plot.py datasets/dataset_train.csv && echo "pair plot ran succesfully!"
+        python3 srcs/logreg_train.py datasets/dataset_train.csv && echo "Trained model succesfully!"
+        python3 srcs/logreg_predict.py datasets/dataset_test.csv && echo "Succesfully submitted predictions!"
         python3 secret/evaluate.py

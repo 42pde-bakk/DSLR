@@ -31,5 +31,5 @@ From this visualization, what features are you going to use for your logistic re
 First off, train the models by running `python3 srcs/logreg_train.py datasets/dataset_train.csv`.
 This will generate a `datasets/weights` file which can then be used for the predictions.
 
-Then, run the predictions with `python3 srcs/logreg_predict.py datasets/dataset_test.csv`.
+Then, run the predictions with `python3 srcs/logreg_predict.py datasets/dataset_test.csv datasets/weights`.
 This will generate a file with all predictions in `datasets/houses.csv`.
