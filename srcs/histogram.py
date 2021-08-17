@@ -21,9 +21,10 @@ def lowest_std_std(course_list, courses, houses) -> str:
 
 
 def show_histogram(houses, lowest):
-	for house in houses:
-		plt.hist(houses[house][lowest], density=True, label=house, bins=30, alpha=0.5)
+	for house, color in zip(houses, ['red', 'blue', 'orange', 'black']):
+		plt.hist(houses[house][lowest], density=True, label=house, bins=30, alpha=0.35, color=color)
 	plt.title(lowest)
+	plt.legend(houses.keys())
 	plt.show()
 
 
