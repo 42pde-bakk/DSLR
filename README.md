@@ -21,14 +21,14 @@ Which Hogwarts course has a homogenous score distribution between all four house
 
 ### V.2.2 Scatter plot
 What are the two features that are similar ?
-`python3 srcs/histogram.py datasets/dataset_train.csv`
+`python3 srcs/scatter_plot.py datasets/dataset_train.csv`
 
 ### V.2.3 Pair plot
 From this visualization, what features are you going to use for your logistic regression?
-`python3 srcs/histogram.py datasets/dataset_train.csv`
+`python3 srcs/pair_plot.py datasets/dataset_train.csv`
 
 ## V.3 Logistic Regression
-First off, train the models by running `python3 srcs/logreg_train.py dataset_train.csv`.
+First off, train the models by running `python3 srcs/logreg_train.py datasets/dataset_train.csv`.
 This will generate a `datasets/weights` file which can then be used for the predictions.
 
 Then, run the predictions with `python3 srcs/logreg_predict.py datasets/dataset_test.csv`.
