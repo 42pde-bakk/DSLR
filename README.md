@@ -4,8 +4,9 @@ Subject created by the 42AI association. Discover Data Science in the projects w
 
 ## Setup
 
-git clone https://github.com/pde-bakk/DSLR.git && cd DSLR
-pip3 install -r requirements.txt
+`git clone https://github.com/pde-bakk/DSLR.git && cd DSLR`
+
+`pip3 install -r requirements.txt`
 
 ## V.1 Data Analysis
 This program displays information about all numerical features of the provided dataset.
