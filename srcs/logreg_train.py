@@ -1,9 +1,8 @@
 from pkgs.parsing import check_input
+from pkgs.logisticregression import LogisticRegression
 import pandas as pd
 import numpy as np
 import sys
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
 import pickle
 
 
@@ -19,28 +18,37 @@ def save_weights(logreg):
 	pickle.dump(logreg, open('datasets/weights', 'wb'))
 
 
-def main():
-	check_input(sys.argv)
+def parse_data():
+	col_names = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'num']  # column names
 
-	df = pd.read_csv(sys.argv[1], index_col=0)
-	df.fillna(0, inplace=True)  # Fill all NaN's with 0's
+	df = pd.read_csv('datasets/processed.cleveland.data.csv', header=None)
+	df.columns = col_names  # setting dataframe column names
+	df.replace({'?': np.nan}, inplace=True)
+	df[['ca', 'thal']] = df[['ca', 'thal']].astype('float64')  # Casting columns data-type to floats
+	df['ca'].replace({np.nan: df['ca'].median()}, inplace=True)  # replaces null values of ca column with median value
+	df['thal'].replace({np.nan: df['thal'].median()}, inplace=True)
+	return df
 
-	x = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Course score to train the model on
-	y = df.values[:, 0]   # Hogwarts House
 
-	x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=4)
+def split_dataset(df):
+	# selecting all the features within our dataset
+	features = df[
+		['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
+	]
+	features = features.to_numpy()  # converts feature set to numpy array
+	target = df['num'].to_numpy()  # converts target column to numpy array
+	print(features.shape, len(target))
+	return features, target
 
-	# Documentation on the solvers:
-	# https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
-	# https://towardsdatascience.com/dont-sweat-the-solver-stuff-aea7cddc3451
-	model = LogisticRegression(max_iter=10400, solver='liblinear')
-	model.fit(x_train, y_train)
 
-	y_pred = model.predict(x_test)
-
-	print_result(y_test, y_pred)
-	save_weights(model)
+def mymain():
+	df = parse_data()
+	features, target = split_dataset(df)
+	lr = LogisticRegression()
+	standardized_features = LogisticRegression.standardize_data(features)
+	probs, preds = lr.multinomialLogReg(features, target)
+	print(lr.accuracy(preds, target))
 
 
 if __name__ == '__main__':
-	main()
+	mymain()
