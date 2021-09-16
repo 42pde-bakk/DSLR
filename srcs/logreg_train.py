@@ -41,13 +41,29 @@ def split_dataset(df):
 	return features, target
 
 
-def mymain():
-	df = parse_data()
-	features, target = split_dataset(df)
+def test(df):
 	lr = LogisticRegression()
-	standardized_features = LogisticRegression.standardize_data(features)
-	probs, preds = lr.multinomialLogReg(features, target)
-	print(lr.accuracy(preds, target))
+	x_train, y_train, x_test, y_test = lr.train_test_split(df)
+	# print(f'shapes:', x_train.shape, y_train.shape, x_test.shape, y_test.shape)
+	loss_list = lr.stochastic_gradient_descent(x_train, y_train)
+	testProbs, testPreds = lr.multinomialLogReg(x_test)
+	acc = lr.accuracy(testPreds, y_test)
+	print(acc)
+	return acc
+
+
+def mymain(count=1):
+	df = parse_data()
+	total = 0
+	for i in range(count):
+		total += test(df)
+	print(f'average = {total / count}')
+
+	# features, target = split_dataset(df)
+	# lr = LogisticRegression()
+	# standardized_features = LogisticRegression.standardize_data(features)
+	# probs, preds = lr.multinomialLogReg(standardized_features, target)
+	# print(lr.accuracy(preds, target))
 
 
 if __name__ == '__main__':
