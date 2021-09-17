@@ -3,7 +3,6 @@ from pkgs.logisticregression import LogisticRegression
 import pandas as pd
 import numpy as np
 import sys
-import pickle
 
 
 def print_result(y_test, y_pred):
@@ -12,10 +11,6 @@ def print_result(y_test, y_pred):
 		if test == pred:
 			correct += 1
 	print(f'Got {correct}/{len(y_test)} correct!')
-
-
-def save_weights(logreg):
-	pickle.dump(logreg, open('datasets/weights', 'wb'))
 
 
 def parse_data():
@@ -45,18 +40,44 @@ def test(df):
 	lr = LogisticRegression()
 	x_train, y_train, x_test, y_test = lr.train_test_split(df)
 	# print(f'shapes:', x_train.shape, y_train.shape, x_test.shape, y_test.shape)
-	loss_list = lr.stochastic_gradient_descent(x_train, y_train)
-	testProbs, testPreds = lr.multinomialLogReg(x_test)
-	acc = lr.accuracy(testPreds, y_test)
+	loss_list = lr.fit(x_train, y_train)
+
+	test_preds = lr.predict(x_test)
+	acc = lr.accuracy(test_preds, y_test)
 	print(acc)
 	return acc
 
 
-def mymain(count=1):
+def harrypotter():
+	check_input(sys.argv)
+
+	df = pd.read_csv(sys.argv[1], index_col=0)
+	df.drop(labels=['First Name', 'Last Name', 'Birthday', 'Best Hand'], inplace=True, axis=1)
+	df.fillna(0, inplace=True)  # Fill all NaN's with 0's
+	df.replace({'Ravenclaw': 0, 'Slytherin': 1, 'Gryffindor': 2, 'Hufflepuff': 3}, inplace=True)
+
+	y = df['Hogwarts House'].to_numpy()
+	df.drop('Hogwarts House', inplace=True, axis=1)
+	x = df.to_numpy()
+
+	train_x, train_y, test_x, test_y = LogisticRegression.train_test_split(x, y, test_size=0.2)
+	lr = LogisticRegression(n_iterations=100)
+	loss_list = lr.stochastic_gradient_descent(train_x, train_y)
+	print(f'loss_list={loss_list}, {len(loss_list)}')
+	test_preds = lr.predict(test_x)
+	acc = lr.accuracy(test_preds, test_y)
+	print(f'accuracy is {acc}%')
+	print(f'weights={lr.weights}')
+	print(f'biases = {lr.biases}')
+	# save_weights(model)
+	return acc
+
+
+def mymain(count=10):
 	df = parse_data()
 	total = 0
 	for i in range(count):
-		total += test(df)
+		total += harrypotter()
 	print(f'average = {total / count}')
 
 	# features, target = split_dataset(df)
@@ -67,4 +88,4 @@ def mymain(count=1):
 
 
 if __name__ == '__main__':
-	mymain()
+	mymain(1)

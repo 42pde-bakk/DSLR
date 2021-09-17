@@ -2,7 +2,7 @@ from pkgs.parsing import predict_check_input
 import pandas as pd
 import numpy as np
 import sys
-import pickle
+from pkgs.weights import load_weights
 
 
 def write_to_csv(y_pred):
@@ -23,6 +23,7 @@ def main():
 	df.fillna(method='ffill', inplace=True)
 	x = np.array(df.values[:, np.arange(7, 11)], dtype=float)  # Hogwarts course score to predict Hogwarts house
 
+	log_reg = Logis
 	log_reg = pickle.load(open('datasets/weights', 'rb'))
 
 	y_pred = log_reg.predict(x)
