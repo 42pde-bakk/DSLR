@@ -54,7 +54,7 @@ def harrypotter():
 	df = pd.read_csv(sys.argv[1], index_col=0)
 	df.drop(labels=['First Name', 'Last Name', 'Birthday', 'Best Hand'], inplace=True, axis=1)
 	df.fillna(0, inplace=True)  # Fill all NaN's with 0's
-	df.replace({'Ravenclaw': 0, 'Slytherin': 1, 'Gryffindor': 2, 'Hufflepuff': 3}, inplace=True)
+	# df.replace({'Ravenclaw': 0, 'Slytherin': 1, 'Gryffindor': 2, 'Hufflepuff': 3}, inplace=True)
 
 	y = df['Hogwarts House'].to_numpy()
 	df.drop('Hogwarts House', inplace=True, axis=1)
@@ -62,13 +62,11 @@ def harrypotter():
 
 	train_x, train_y, test_x, test_y = LogisticRegression.train_test_split(x, y, test_size=0.2)
 	lr = LogisticRegression(n_iterations=100)
-	loss_list = lr.stochastic_gradient_descent(train_x, train_y)
+	loss_list = lr.fit(train_x, train_y)
 	print(f'loss_list={loss_list}, {len(loss_list)}')
 	test_preds = lr.predict(test_x)
 	acc = lr.accuracy(test_preds, test_y)
 	print(f'accuracy is {acc}%')
-	print(f'weights={lr.weights}')
-	print(f'biases = {lr.biases}')
 	# save_weights(model)
 	return acc
 

@@ -15,6 +15,7 @@ class LogisticRegression:
 		self.thetas = (0, 0)
 		self.weights = np.ndarray
 		self.biases = np.ndarray
+		self.target_uniques = np.ndarray
 
 	@staticmethod
 	def sigmoid(z):
@@ -128,7 +129,7 @@ class LogisticRegression:
 		"""
 		logit_scores = self.linear_predict(features)
 		probabilities = self.softmax_normalizer(logit_scores)
-		predictions = np.array([np.argmax(i) for i in probabilities])  # returns the outcome with max probability
+		predictions = np.array([self.target_uniques[np.argmax(i)] for i in probabilities])  # returns the outcome with max probability
 		return probabilities, predictions
 
 	def predict(self, x_test):
@@ -147,7 +148,6 @@ class LogisticRegression:
 			loss_list- Array containing list of losses observed after each epoch
 		"""
 		self.initial_weights(features, target)
-		target = target.astype(int)
 		loss_list = np.array([])
 
 		for i in range(self.n_iterations):
@@ -172,6 +172,8 @@ class LogisticRegression:
 		return loss_list
 
 	def fit(self, x_train, y_train, solver='sgd'):
+		self.target_uniques = np.unique(y_train)
+		y_train = np.unique(y_train, return_inverse=True)[1]  # All target values mapped to values from 0 to (n-1)
 		return self.stochastic_gradient_descent(x_train, y_train)
 
 	@staticmethod
