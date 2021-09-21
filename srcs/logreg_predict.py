@@ -1,5 +1,4 @@
 from pkgs.parsing import predict_check_input
-from pkgs.logisticregression import LogisticRegression
 import pandas as pd
 import numpy as np
 import sys
@@ -9,11 +8,11 @@ from pkgs.weights import load_weights
 def write_to_csv(y_pred: np.ndarray, predictions_filename: str):
 	with open(predictions_filename, 'w+') as f:
 		f.write('Index,Hogwarts House\n')
-		for i in range(len(y_pred)):
+		for i, pred in enumerate(y_pred):
 			# You can't have a space after the comma.
 			# evaluate.py just splits on the comma and sees every char after it as your prediction.
 			# And 'Gryffindor' != ' Gryffindor'
-			f.write(f'{i},{y_pred[i]}\n')
+			f.write(f'{i},{pred}\n')
 
 
 def main():
