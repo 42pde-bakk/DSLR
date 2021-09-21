@@ -115,3 +115,4 @@ dmypy.json
 
 datasets/houses.csv
 datasets/weights
+datasets/weights.csv
