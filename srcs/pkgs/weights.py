@@ -11,7 +11,7 @@ def save_weights(lr: LogisticRegression, filename: str) -> None:
 			f.write(row + '\n')
 
 
-def load_weights(filename: str):
+def load_weights(filename: str) -> LogisticRegression:
 	lr = LogisticRegression()
 	with open(filename, 'r') as f:
 		lines = f.read().split()
