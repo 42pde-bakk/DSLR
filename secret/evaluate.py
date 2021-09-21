@@ -45,4 +45,5 @@ if __name__ == '__main__':
         print("Good job! Mc Gonagall congratulates you.")
     else:
         print("Too bad, Mc Gonagall flunked you.")
+        exit(1)
 
