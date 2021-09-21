@@ -3,11 +3,6 @@ from .logisticregression import LogisticRegression
 
 
 def save_weights(lr: LogisticRegression, filename: str) -> None:
-	with open('datasets/test', 'w') as f:
-		print(lr.biases[0].shape)
-		f.write(str(lr.target_uniques) + '\n')
-		f.write(str(lr.biases) + str(lr.biases.shape) + '\n')
-		f.write(str(lr.weights) + str(lr.weights.shape) + '\n')
 	with open(filename, 'w') as f:
 		f.write(','.join(lr.target_uniques) + '\n')
 		f.write('biases:\n' + ','.join([str(bias[0]) for bias in lr.biases]) + '\nweights:\n')
@@ -23,9 +18,13 @@ def load_weights(filename: str):
 		lr.target_uniques = lines[0].strip().split(sep=',')
 		lr.biases = np.zeros((len(lr.target_uniques), 1))
 		biases = [float(bias) for bias in lines[2].split(sep=',')]
-		lr.biases = np.fromiter(biases, dtype=float).reshape(-1, 1)
-		print(lr.biases)
-		# lr.weights = np.zeros((len(lr.target_uniques), len(lines) - 4))
-		# for i in range(4, len(lines)):
-
+		lr.biases = np.fromiter(biases, dtype=np.float64).reshape(-1, 1)
+		lr.weights = np.zeros((len(lr.target_uniques), len(lines) - 4))
+		features = {i: list() for i, _ in enumerate(lr.target_uniques)}
+		for row in range(4, len(lines)):
+			row_weights = lines[row].split(sep=',')
+			for i, _ in enumerate(lr.target_uniques):
+				features[i].append(row_weights[i])
+		for i, _ in enumerate(lr.target_uniques):
+			lr.weights[i] = np.fromiter(features[i], dtype=float)
 	return lr
