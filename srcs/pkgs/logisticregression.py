@@ -1,21 +1,20 @@
 import numpy as np
 
-
 # Source: https://ml-cheatsheet.readthedocs.io/en/latest/logistic_regression.html
 # https://towardsdatascience.com/logistic-regression-from-scratch-in-python-ec66603592e2
-
 # Multinomial logistic regression:
 # https://towardsdatascience.com/ml-from-scratch-multinomial-logistic-regression-6dda9cbacf9d
 
 
 class LogisticRegression:
-	def __init__(self, n_iterations=2000, learning_rate=1e-5):
+	def __init__(self, n_iterations=2000, learning_rate=1e-5, normalization: bool = True):
 		self.n_iterations = n_iterations
 		self.learning_rate = learning_rate
 		self.thetas = (0, 0)
 		self.weights = np.ndarray
 		self.biases = np.ndarray
-		self.target_uniques = np.ndarray
+		self.target_uniques = list()
+		self.normalization = normalization
 
 	@staticmethod
 	def sigmoid(z):
@@ -46,7 +45,7 @@ class LogisticRegression:
 		return ce_loss
 
 	@staticmethod
-	def train_test_split(x, y, test_size=0.2, normalize_data: bool = True):
+	def train_test_split(x, y, test_size=0.2):
 		"""Splits dataset into training and testing sets.
 
 		Args-
@@ -64,10 +63,6 @@ class LogisticRegression:
 
 		train_x = np.delete(x, random_rows, axis=0)
 		train_y = np.delete(y, random_rows, axis=0)
-
-		if normalize_data:
-			train_x = LogisticRegression.normalize(train_x)
-			test_x = LogisticRegression.normalize(test_x)
 		return train_x, train_y, test_x, test_y
 
 	def initial_weights(self, features, target):
@@ -133,6 +128,8 @@ class LogisticRegression:
 		return probabilities, predictions
 
 	def predict(self, x_test):
+		if self.normalization:
+			x_test = self.normalize(x_test)
 		probabilities, predictions = self.multinomial_logistic_regression(x_test)
 		return predictions
 
@@ -172,7 +169,9 @@ class LogisticRegression:
 		return loss_list
 
 	def fit(self, x_train, y_train, solver='sgd'):
-		self.target_uniques = np.unique(y_train)
+		self.target_uniques = np.unique(y_train).tolist()
+		if self.normalization:
+			x_train = self.normalize(x_train)
 		y_train = np.unique(y_train, return_inverse=True)[1]  # All target values mapped to values from 0 to (n-1)
 		return self.stochastic_gradient_descent(x_train, y_train)
 
@@ -187,9 +186,7 @@ class LogisticRegression:
 		Returns-
 			accuracy- Accuracy percentage of our model
 		"""
-		correct_preds = 0
-		for i in range(len(predictions)):
-			if predictions[i] == target[i]:
-				correct_preds += 1
+		correct_preds = sum([pred == actual for pred, actual in zip(predictions, target)])
 		accuracy = correct_preds / len(predictions) * 100
+		print(f'Predicted {correct_preds}/{len(predictions)} correct, that\'s {accuracy:.2f}%')
 		return accuracy
