@@ -16,7 +16,7 @@ def harrypotter():
 	df.drop('Hogwarts House', inplace=True, axis=1)
 	x = df.to_numpy()
 
-	lr = LogisticRegression(n_iterations=5000)
+	lr = LogisticRegression(n_iterations=100)
 	train_x, train_y, test_x, test_y = lr.train_test_split(x, y, test_size=0.2)
 	lr.fit(train_x, train_y)
 	test_preds = lr.predict(test_x)
