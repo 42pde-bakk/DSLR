@@ -67,8 +67,8 @@ class LogisticRegression:
 
 	def initial_weights(self, features, target):
 		feature_amount, target_options = features.shape[1], len(np.unique(target))
-		self.weights = np.random.rand(target_options, feature_amount)
-		self.biases = np.random.rand(target_options, 1)
+		self.weights = np.zeros((target_options, feature_amount))
+		self.biases = np.zeros((target_options, 1))
 
 	def linear_predict(self, feature_matrix):
 		"""This is the linear predictor function for out MLR model. It calculates the logit scores for each possible outcome.
