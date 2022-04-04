@@ -2,6 +2,8 @@
  
 Subject created by the 42AI association. Discover Data Science in the projects where you re-constitute Poudlard’s Sorting Hat. Warning: this is not a subject on cameras.
 
+## Project status: [![pde-bakk's 42 dslr Score](https://badge42.vercel.app/api/v2/cl1kxvlgu002109lfx5bumh9s/project/2295758)](https://github.com/JaeSeoKim/badge42)
+
 ## Setup
 
 `git clone https://github.com/pde-bakk/DSLR.git && cd DSLR`
