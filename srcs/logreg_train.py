@@ -55,7 +55,7 @@ def run_training():
 		# Train a model for each house (One vs All)
 		print(f'Let\'s train model {i} for {house}')
 		thetas = np.ones(shape=(len(FEATURES) + 1, 1))
-		model = MyLogR(thetas, alpha=0.0001, max_iter=20_000)
+		model = MyLogR(thetas, alpha=0.001, max_iter=100, gd_type='Stochastic')
 		model.set_params(unique_outcomes=unique_houses)
 		new_train_y = np.where(train_y == i, 1, 0)
 		model.fit_(train_x, new_train_y)

@@ -1,9 +1,29 @@
 from __future__ import annotations
 
 import numpy as np
+import enum
 
 from .other_metrics import accuracy_score_
 
+
+class GDType(enum.Enum):
+	DEFAULT = 0,
+	STOCHASTIC = 1,
+	BATCH = 2,
+	MINI_BATCH = 3
+
+	@classmethod
+	def parse_str(cls, s: str) -> GDType:
+		match s:
+			case 'Default':
+				return cls.DEFAULT
+			case 'Stochastic':
+				return cls.DEFAULT
+			case 'Batch':
+				return cls.DEFAULT
+			case 'Mini-Batch':
+				return cls.DEFAULT
+		return NotImplemented
 
 def accepts(*types):
 	def check_accepts(f):
@@ -27,13 +47,14 @@ class MyLogisticRegression:
 	If a function has the __ prefix, it means that it assumes the x value has a column of ones already...
 	"""
 
-	def __init__(self, thetas: np.ndarray, alpha: float = 0.005, max_iter: int = 10_000):
+	def __init__(self, thetas: np.ndarray, alpha: float = 0.005, max_iter: int = 10_000, gd_type: str = 'Standard'):
 		if not isinstance(thetas, np.ndarray) or not isinstance(alpha, float) or not isinstance(max_iter, int):
 			raise TypeError('Bad arguments given to MyLogisticRegression')
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
 		self.unique_outcomes = list()
+		self.gd_type = GDType.parse_str(gd_type)
 
 	def get_params(self) -> dict:
 		"""Get parameters for this estimator."""
@@ -82,6 +103,28 @@ class MyLogisticRegression:
 		y_hat = self.__predict_(x)
 		return x.T.dot(y_hat - y) / y.shape[0]
 
+	def __fit_stochastically_(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
+		for idx in range(self.max_iter):
+			if self.gd_type == GDType.STOCHASTIC:
+				rng_state = np.random.get_state()
+				np.random.shuffle(x)
+				np.random.set_state(rng_state)  # To ensure the arrays are still in unison
+				np.random.shuffle(y)
+				for row_idx in range(x.shape[0]):
+					self.thetas -= (self.alpha * self.__gradient_(x[row_idx], y[row_idx]))
+			return self.thetas
+
+	def __fit_mini_batch_(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
+		# Default implementation (Batch Gradient Descent)
+		batch_amount = 10
+		batches_x = np.split(x, batch_amount)
+		batches_y = np.split(y, batch_amount)
+
+		for _ in range(self.max_iter):
+			for xbatch, ybatch in zip(batches_x, batches_y):
+				self.thetas -= (self.alpha * self.__gradient_(xbatch, ybatch))
+		return self.thetas
+
 	def fit_(self, x: np.ndarray, y: np.ndarray) -> np.ndarray:
 		"""
 		:param x: np.ndarray
@@ -89,9 +132,15 @@ class MyLogisticRegression:
 		:return: new theta values
 		"""
 		x = np.column_stack((np.ones(shape=(x.shape[0], 1)), x))
+		if self.gd_type == GDType.STOCHASTIC:
+			return self.__fit_stochastically_(x, y)
+		elif self.gd_type == GDType.MINI_BATCH:
+			return self.__fit_mini_batch_(x, y)
+
+		# Default implementation (Batch Gradient Descent)
 		for idx in range(self.max_iter):
-			assert not np.isnan(self.__gradient_(x, y)).any()
 			self.thetas -= (self.alpha * self.__gradient_(x, y))
+
 		return self.thetas
 
 	@staticmethod
