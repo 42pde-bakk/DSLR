@@ -1,11 +1,13 @@
-from typing import Tuple
-from pkgs.parsing import check_input
-from pkgs.feature import Feature, std_deviation
-import pandas as pd
-import sys
-import numpy as np
 import math
+import sys
+from typing import Tuple
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from pkgs.feature import Feature, std_deviation
+from pkgs.parsing import check_input
 
 
 def lowest_std_std(course_list: set, courses: dict, houses: dict) -> Tuple[pd.DataFrame, str]:

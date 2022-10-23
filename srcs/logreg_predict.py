@@ -1,34 +1,44 @@
-from pkgs.parsing import predict_check_input
-import pandas as pd
-import numpy as np
+import pickle
 import sys
-from pkgs.weights import load_weights
+
+import pandas as pd
+
+from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
+from pkgs.parsing import check_input
+
+FEATURES = [
+	'Arithmancy', 'Astronomy', 'Herbology', 'Defense Against the Dark Arts', 'Divination', 'Muggle Studies',
+	'Ancient Runes', 'History of Magic', 'Transfiguration', 'Potions', 'Care of Magical Creatures', 'Charms',
+	'Flying'
+]
+
+TARGET_COLUMN = 'Hogwarts House'
+OUTPUT_FILENAME = 'houses.csv'
 
 
-def write_to_csv(y_pred: np.ndarray, predictions_filename: str):
-	with open(predictions_filename, 'w+') as f:
-		f.write('Index,Hogwarts House\n')
-		for i, pred in enumerate(y_pred):
-			# You can't have a space after the comma.
-			# evaluate.py just splits on the comma and sees every char after it as your prediction.
-			# And 'Gryffindor' != ' Gryffindor'
-			f.write(f'{i},{pred}\n')
+def run_predictions():
+	check_input(sys.argv, argv_len=3)
+	csv_file = sys.argv[1]
+	models_file = sys.argv[2]
 
+	df = pd.read_csv(csv_file, index_col=0)
+	df.fillna(0.0, inplace=True)
 
-def main():
-	predict_check_input(sys.argv)
+	x = df[FEATURES].to_numpy().reshape(-1, len(FEATURES))
+	x = (x - x.mean(axis=0)) / x.std(axis=0)  # normalize the data
 
-	df = pd.read_csv(sys.argv[1], index_col=0)
-	df.drop(labels=['First Name', 'Last Name', 'Birthday', 'Best Hand'], inplace=True, axis=1)
-	df.drop('Hogwarts House', inplace=True, axis=1)
-	df.fillna(0, inplace=True)  # Fill all NaN's with 0's
-	x = df.to_numpy()
+	with open(models_file, 'rb') as f:
+		models = pickle.load(f)
 
-	lr = load_weights('datasets/weights.csv')
-
-	y_pred = lr.predict(x)
-	write_to_csv(y_pred, 'datasets/houses.csv')
+	y_hat = MyLogR.multiclass_predict_(models, x)
+	unique_houses = models[0].unique_outcomes
+	data = []
+	for idx, pred in enumerate(y_hat):
+		data.append([unique_houses[pred[0]]])
+	df = pd.DataFrame(data, columns=['Hogwarts House'])
+	df.index.name = 'Index'
+	df.to_csv(OUTPUT_FILENAME)
 
 
 if __name__ == '__main__':
-	main()
+	run_predictions()

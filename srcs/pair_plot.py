@@ -1,10 +1,12 @@
-from pkgs.parsing import check_input
-from pkgs.feature import Feature
-import sys
 import math
-import pandas as pd
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from pkgs.feature import Feature
+from pkgs.parsing import check_input
 
 
 def create_dict(houses) -> tuple:

@@ -113,6 +113,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-datasets/houses.csv
-datasets/weights
-datasets/weights.csv
+houses.csv
+models.pickle

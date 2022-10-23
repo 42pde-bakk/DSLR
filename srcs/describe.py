@@ -1,9 +1,11 @@
-from pkgs.parsing import check_input
-from pkgs.feature import Feature
-import pandas as pd
-import sys
-import numpy as np
 import math
+import sys
+
+import numpy as np
+import pandas as pd
+
+from pkgs.feature import Feature
+from pkgs.parsing import check_input
 
 
 def print_formatted(features):
