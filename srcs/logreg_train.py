@@ -3,11 +3,10 @@ import copy
 from pkgs.parsing import check_input
 from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
 from pkgs.data_splitter import data_splitter
-from pkgs.other_metrics import accuracy_score_, f1_score_
-from pkgs.weights import save_weights
 import pandas as pd
 import numpy as np
 import sys
+import pickle
 
 FEATURES = [
 	'Arithmancy', 'Astronomy', 'Herbology', 'Defense Against the Dark Arts', 'Divination', 'Muggle Studies',
@@ -16,24 +15,13 @@ FEATURES = [
 ]
 
 TARGET_COLUMN = 'Hogwarts House'
-# FEATURES = [
-# 	'Care of Magical Creatures', 'Astronomy', 'Herbology', 'Defense Against the Dark Arts'
-# ]
 
 
-def combine_models(models: list[MyLogR], x_test: np.ndarray, y_test: np.ndarray, houses_dict: dict):
-	predict_together = np.hstack([m.predict_(x_test) for m in models])
-	# for i in range(len(models)):
-	# 	print(predict_together[i][0])
-	y_hat = predict_together.argmax(axis=1).reshape(-1, 1)
-	# u, inv = np.unique(y_hat, return_inverse=True)
-	print(f'accuracy = {accuracy_score_(y_test, y_hat) * 100:.1f}%')
-
-
-def harrypotter():
+def run_training():
 	check_input(sys.argv)
+	csv_file = sys.argv[1]
 
-	df = pd.read_csv(sys.argv[1], index_col=0)
+	df = pd.read_csv(csv_file, index_col=0)
 	df.fillna(0.0, inplace=True)
 
 	y = df[TARGET_COLUMN].to_numpy().reshape(-1, 1)
@@ -49,12 +37,18 @@ def harrypotter():
 	for i, house in enumerate(unique_houses):
 		# Train a model for each house (One vs All)
 		print(f'Let\'s train model {i} for {house}')
-		model = MyLogR(thetas=np.ones(shape=(len(FEATURES) + 1, 1)), alpha=0.0001, max_iter=20_000)
+		thetas = np.ones(shape=(len(FEATURES) + 1, 1))
+		model = MyLogR(thetas, alpha=0.0001, max_iter=20_000)
+		model.set_params(unique_outcomes=unique_houses)
 		new_train_y = np.where(train_y == i, 1, 0)
 		model.fit_(train_x, new_train_y)
 		models.append(copy.deepcopy(model))
-	combine_models(models, test_x, test_y, houses_dict)
+	accuracy = MyLogR.combine_models(models, test_x, test_y)
+	print(f'accuracy = {accuracy:.1f}%')
+
+	with open('models.pickle', 'wb') as f:
+		pickle.dump(models, f)
 
 
 if __name__ == '__main__':
-	harrypotter()
+	run_training()

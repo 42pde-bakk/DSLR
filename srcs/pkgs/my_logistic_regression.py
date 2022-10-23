@@ -1,4 +1,6 @@
+from __future__ import annotations
 import numpy as np
+from .other_metrics import accuracy_score_
 
 
 def accepts(*types):
@@ -29,6 +31,18 @@ class MyLogisticRegression:
 		self.alpha = alpha
 		self.max_iter = max_iter
 		self.thetas = thetas
+		self.unique_outcomes = list()
+
+	def get_params(self) -> dict:
+		"""Get parameters for this estimator."""
+		return vars(self)
+
+	def set_params(self, **params) -> MyLogisticRegression:
+		"""Set the parameters of this estimator."""
+		for key, value in params.items():
+			if key in vars(self).keys():
+				setattr(self, key, value)
+		return self
 
 	@staticmethod
 	@accepts(np.ndarray)
@@ -141,3 +155,21 @@ class MyLogisticRegression:
 		ones = np.ones(shape=(x.shape[0], 1))
 		x = np.hstack((ones, x))
 		return MyLogisticRegression.sigmoid_(x.dot(self.thetas))
+
+	@staticmethod
+	def multiclass_predict_(models: list[MyLogisticRegression], x_test: np.ndarray) -> np.ndarray:
+		predict_together = np.hstack([m.predict_(x_test) for m in models])
+		return predict_together.argmax(axis=1).reshape(-1, 1)
+
+	@staticmethod
+	def combine_models(models: list[MyLogisticRegression], x_test: np.ndarray, y_test: np.ndarray) -> float:
+		"""
+		Combines N models to finalize our one-vs-all predictions
+		:param models: list of our N models
+		:param x_test: numpy array of our input
+		:param y_test: numpy array of the expected output
+		:return: a float value between 0 and 1 showcasing how accurate our combined model is
+		"""
+		y_hat = MyLogisticRegression.multiclass_predict_(models, x_test)
+		accuracy = accuracy_score_(y_test, y_hat) * 100
+		return accuracy
