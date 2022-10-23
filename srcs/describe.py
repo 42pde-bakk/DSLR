@@ -1,5 +1,6 @@
 import math
 import sys
+import os
 
 import numpy as np
 import pandas as pd
@@ -10,7 +11,7 @@ from pkgs.parsing import check_input
 
 def print_formatted(features):
 	longest_name = max([len(feature.getvalue('')) for feature in features])
-	for row in ["", "Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max"]:
+	for row in ["", "Count", "Mean", "Std", "Min", "25%", "50%", "75%", "Max", 'Var', 'Mad']:
 		print(row.ljust(longest_name), end=' ')
 		for f in features:
 			print(str(f.getvalue(row)).ljust(longest_name), end=' ')
