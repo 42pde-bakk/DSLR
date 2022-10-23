@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import numpy as np
 import enum
+
+import numpy as np
 
 from .other_metrics import accuracy_score_
 
@@ -24,6 +25,7 @@ class GDType(enum.Enum):
 			case 'Mini-Batch':
 				return cls.DEFAULT
 		return NotImplemented
+
 
 def accepts(*types):
 	def check_accepts(f):
