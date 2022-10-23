@@ -27,27 +27,27 @@ class Feature:
 		self.var = variance(col)
 		self.mad = mean_absolute_deviation(col)
 
-	def getvalue(self, val: str) -> str:
+	def getvalue(self, val: str):
 		match val:
 			case '':
 				return self.name
 			case 'Count':
-				return str(self.count)
+				return self.count
 			case 'Mean':
-				return str(self.mean)
+				return self.mean
 			case 'Std':
-				return str(self.std)
+				return self.std
 			case 'Var':
-				return str(self.var)
+				return self.var
 			case '25%':
-				return str(self.p25)
+				return self.p25
 			case '50%':
-				return str(self.p50)
+				return self.p50
 			case '75%':
-				return str(self.p75)
+				return self.p75
 			case 'Min':
-				return str(self.min)
+				return self.min
 			case 'Max':
-				return str(self.max)
+				return self.max
 			case 'Mad':
-				return str(self.mad)
+				return self.mad
