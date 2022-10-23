@@ -1,11 +1,10 @@
-import copy
 import pickle
-
-from pkgs.parsing import check_input
-from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
-import pandas as pd
-import numpy as np
 import sys
+
+import pandas as pd
+
+from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
+from pkgs.parsing import check_input
 
 FEATURES = [
 	'Arithmancy', 'Astronomy', 'Herbology', 'Defense Against the Dark Arts', 'Divination', 'Muggle Studies',

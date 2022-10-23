@@ -40,10 +40,6 @@ def data_splitter(x: np.ndarray, y: np.ndarray, proportion: float) -> Tuple | No
 	if x.shape[0] != y.shape[0]:
 		print(f'Why are you giving me arrays of differing sizes?', file=sys.stderr)
 		return
-	# rng_state = np.random.get_state()
-	# np.random.shuffle(x)
-	# np.random.set_state(rng_state)  # To ensure the arrays are still in unison
-	# np.random.shuffle(y)
 
 	cutoff = int(proportion * x.shape[0])
 	x_train, x_test = np.split(x, [cutoff])

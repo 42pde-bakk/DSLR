@@ -1,12 +1,13 @@
 import copy
-
-from pkgs.parsing import check_input
-from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
-from pkgs.data_splitter import data_splitter
-import pandas as pd
-import numpy as np
-import sys
 import pickle
+import sys
+
+import numpy as np
+import pandas as pd
+
+from pkgs.data_splitter import data_splitter
+from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
+from pkgs.parsing import check_input
 
 FEATURES = [
 	'Arithmancy', 'Astronomy', 'Herbology', 'Defense Against the Dark Arts', 'Divination', 'Muggle Studies',

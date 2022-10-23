@@ -1,10 +1,12 @@
-from pkgs.parsing import check_input
-from pkgs.feature import Feature
-import pandas as pd
-import sys
-import numpy as np
 import math
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from pkgs.feature import Feature
+from pkgs.parsing import check_input
 
 
 def create_dict(houses) -> dict:
