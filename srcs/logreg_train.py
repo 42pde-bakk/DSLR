@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd
 from pkgs.data_splitter import data_splitter
 from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
-from pkgs.other_metrics import accuracy_score_, f1_score_
+from pkgs.other_metrics import accuracy_score_
+from pkgs.other_metrics import f1_score_
 from pkgs.parsing import check_input
 from pkgs.weights import save_weights
 
