@@ -4,6 +4,7 @@ import sys
 
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 
 from pkgs.data_splitter import data_splitter
 from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
@@ -16,6 +17,21 @@ FEATURES = [
 ]
 
 TARGET_COLUMN = 'Hogwarts House'
+
+
+def plot_predictions(x: np.ndarray, y: np.ndarray, y_hat: np.ndarray) -> None:
+	fig, axs = plt.subplots(nrows=2, ncols=2)
+	for i in range(4):
+		feature = FEATURES[i]
+		plot = axs[i // 2, i % 2]
+		plot.set_title(feature)
+		x_col = x[:, i]
+		size = 15
+		plot.scatter(x_col, y, label='True houses', s=5 * size)
+		plot.scatter(x_col, y_hat, label='My algo\'s predictions', s=2 * size)
+		plot.legend(loc='best')
+
+	plt.show()
 
 
 def run_training():
@@ -39,7 +55,7 @@ def run_training():
 		# Train a model for each house (One vs All)
 		print(f'Let\'s train model {i} for {house}')
 		thetas = np.ones(shape=(len(FEATURES) + 1, 1))
-		model = MyLogR(thetas, alpha=0.0001, max_iter=20_000)
+		model = MyLogR(thetas, alpha=0.001, max_iter=100, gd_type='Stochastic')
 		model.set_params(unique_outcomes=unique_houses)
 		new_train_y = np.where(train_y == i, 1, 0)
 		model.fit_(train_x, new_train_y)
@@ -49,6 +65,9 @@ def run_training():
 
 	with open('models.pickle', 'wb') as f:
 		pickle.dump(models, f)
+
+	y_hat = MyLogR.multiclass_predict_(models, test_x)
+	plot_predictions(test_x, y_hat, test_y)
 
 
 if __name__ == '__main__':

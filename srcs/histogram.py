@@ -34,8 +34,8 @@ def lowest_std_std(course_list: set, courses: dict, houses: dict) -> Tuple[pd.Da
 def show_histogram(houses: dict, lowest: str) -> None:
 	for house, color in zip(houses, ['red', 'blue', 'orange', 'black']):
 		plt.hist(houses[house][lowest], density=True, label=house, bins=30, alpha=0.35, color=color)
-	plt.title(lowest)
-	plt.legend(houses.keys())
+	plt.title(f'Which Hogwarts course has a homogeneous \nscore distribution between all four houses?\n\n{lowest}!')
+	plt.legend(houses.keys(), loc='best')
 	plt.show()
 
 

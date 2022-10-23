@@ -30,7 +30,7 @@ def plot(houses, course_list):
 		for col_plt, col_course in zip(row_plt, course_list):
 			for house in houses:
 				if row_course != col_course:
-					col_plt.scatter(houses[house][col_course], houses[house][row_course], alpha=0.4)
+					col_plt.scatter(houses[house][col_course], houses[house][row_course], alpha=0.4, marker='.')
 				else:
 					col_plt.hist(houses[house][row_course], density=True, label=house, bins=30, alpha=0.5)
 			col_plt.tick_params(labelbottom=False, labelleft=False)
@@ -41,7 +41,7 @@ def plot(houses, course_list):
 			if col_plt.get_subplotspec().is_last_row():
 				col_plt.set_xlabel(col_course.replace(' ', '\n'))
 
-	plt.legend(houses.keys())
+	plt.legend(houses.keys(), loc='upper right')
 
 	plt.show()
 
