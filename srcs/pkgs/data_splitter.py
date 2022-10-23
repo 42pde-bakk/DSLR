@@ -38,7 +38,7 @@ def data_splitter(x: np.ndarray, y: np.ndarray, proportion: float) -> Tuple | No
             This function should not raise any Exception.
     """
     if x.shape[0] != y.shape[0]:
-        print(f'Why are you giving me arrays of differing sizes?', file=sys.stderr)
+        print(f"Why are you giving me arrays of differing sizes?", file=sys.stderr)
         return
     # rng_state = np.random.get_state()
     # np.random.shuffle(x)

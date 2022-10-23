@@ -23,9 +23,15 @@ class MyLogisticRegression:
     If a function has the __ prefix, it means that it assumes the x value has a column of ones already...
     """
 
-    def __init__(self, thetas: np.ndarray, alpha: float = 0.005, max_iter: int = 10_000):
-        if not isinstance(thetas, np.ndarray) or not isinstance(alpha, float) or not isinstance(max_iter, int):
-            raise TypeError('Bad arguments given to MyLogisticRegression')
+    def __init__(
+        self, thetas: np.ndarray, alpha: float = 0.005, max_iter: int = 10_000
+    ):
+        if (
+            not isinstance(thetas, np.ndarray)
+            or not isinstance(alpha, float)
+            or not isinstance(max_iter, int)
+        ):
+            raise TypeError("Bad arguments given to MyLogisticRegression")
         self.alpha = alpha
         self.max_iter = max_iter
         self.thetas = thetas
@@ -75,12 +81,14 @@ class MyLogisticRegression:
         x = np.column_stack((np.ones(shape=(x.shape[0], 1)), x))
         for idx in range(self.max_iter):
             assert not np.isnan(self.__gradient_(x, y)).any()
-            self.thetas -= (self.alpha * self.__gradient_(x, y))
+            self.thetas -= self.alpha * self.__gradient_(x, y)
         return self.thetas
 
     @staticmethod
     @accepts(np.ndarray, np.ndarray, float)
-    def loss_elem_(y: np.ndarray, y_hat: np.ndarray, eps: float = 1e-15) -> np.ndarray | None:
+    def loss_elem_(
+        y: np.ndarray, y_hat: np.ndarray, eps: float = 1e-15
+    ) -> np.ndarray | None:
         """
         :param y: Actual values as an np.ndarray
         :param y_hat: Predicted values as an np.ndarray

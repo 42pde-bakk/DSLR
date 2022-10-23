@@ -109,7 +109,7 @@ def f1_score_(y: np.ndarray, y_hat: np.ndarray, pos_label=1) -> float:
     fp = false_positives(y, y_hat, pos_label)
     fn = false_negatives(y, y_hat, pos_label)
     tn = true_negatives(y, y_hat, pos_label)
-    print(f'{tp=},{fp=},{fn=},{tn=}')
+    print(f"{tp=},{fp=},{fn=},{tn=}")
     precision = precision_score_(y, y_hat, pos_label)
     recall = recall_score_(y, y_hat, pos_label)
     return (2 * precision * recall) / (precision + recall)

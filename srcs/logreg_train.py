@@ -10,24 +10,36 @@ import numpy as np
 import sys
 
 FEATURES = [
-    'Arithmancy', 'Astronomy', 'Herbology', 'Defense Against the Dark Arts', 'Divination', 'Muggle Studies',
-    'Ancient Runes', 'History of Magic', 'Transfiguration', 'Potions', 'Care of Magical Creatures', 'Charms',
-    'Flying'
+    "Arithmancy",
+    "Astronomy",
+    "Herbology",
+    "Defense Against the Dark Arts",
+    "Divination",
+    "Muggle Studies",
+    "Ancient Runes",
+    "History of Magic",
+    "Transfiguration",
+    "Potions",
+    "Care of Magical Creatures",
+    "Charms",
+    "Flying",
 ]
 
-TARGET_COLUMN = 'Hogwarts House'
+TARGET_COLUMN = "Hogwarts House"
 # FEATURES = [
 # 	'Care of Magical Creatures', 'Astronomy', 'Herbology', 'Defense Against the Dark Arts'
 # ]
 
 
-def combine_models(models: list[MyLogR], x_test: np.ndarray, y_test: np.ndarray, houses_dict: dict):
+def combine_models(
+    models: list[MyLogR], x_test: np.ndarray, y_test: np.ndarray, houses_dict: dict
+):
     predict_together = np.hstack([m.predict_(x_test) for m in models])
     # for i in range(len(models)):
     # 	print(predict_together[i][0])
     y_hat = predict_together.argmax(axis=1).reshape(-1, 1)
     # u, inv = np.unique(y_hat, return_inverse=True)
-    print(f'accuracy = {accuracy_score_(y_test, y_hat) * 100:.1f}%')
+    print(f"accuracy = {accuracy_score_(y_test, y_hat) * 100:.1f}%")
 
 
 def harrypotter():
@@ -48,14 +60,15 @@ def harrypotter():
 
     for i, house in enumerate(unique_houses):
         # Train a model for each house (One vs All)
-        print(f'Let\'s train model {i} for {house}')
-        model = MyLogR(thetas=np.ones(shape=(len(FEATURES) + 1, 1)),
-                       alpha=0.0001, max_iter=20_000)
+        print(f"Let's train model {i} for {house}")
+        model = MyLogR(
+            thetas=np.ones(shape=(len(FEATURES) + 1, 1)), alpha=0.0001, max_iter=20_000
+        )
         new_train_y = np.where(train_y == i, 1, 0)
         model.fit_(train_x, new_train_y)
         models.append(copy.deepcopy(model))
     combine_models(models, test_x, test_y, houses_dict)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     harrypotter()
