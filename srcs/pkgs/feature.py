@@ -25,6 +25,7 @@ class Feature:
 		self.p25, self.p50, self.p75 = col[int(len(col) / 4)], col[int(len(col) / 2)], col[int(len(col) / 4 * 3)]
 		self.std = std_deviation(col)
 		self.var = variance(col)
+		self.mad = mean_absolute_deviation(col)
 
 	def getvalue(self, val: str) -> str:
 		match val:
