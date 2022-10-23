@@ -4,6 +4,7 @@ import sys
 
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 
 from pkgs.data_splitter import data_splitter
 from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
@@ -16,6 +17,21 @@ FEATURES = [
 ]
 
 TARGET_COLUMN = 'Hogwarts House'
+
+
+def plot_predictions(x: np.ndarray, y: np.ndarray, y_hat: np.ndarray) -> None:
+	fig, axs = plt.subplots(nrows=2, ncols=2)
+	for i in range(4):
+		feature = FEATURES[i]
+		plot = axs[i // 2, i % 2]
+		plot.set_title(feature)
+		x_col = x[:, i]
+		size = 15
+		plot.scatter(x_col, y, label='True houses', s=5 * size)
+		plot.scatter(x_col, y_hat, label='My algo\'s predictions', s=2 * size)
+		plot.legend(loc='best')
+
+	plt.show()
 
 
 def run_training():
@@ -49,6 +65,9 @@ def run_training():
 
 	with open('models.pickle', 'wb') as f:
 		pickle.dump(models, f)
+
+	y_hat = MyLogR.multiclass_predict_(models, test_x)
+	plot_predictions(test_x, y_hat, test_y)
 
 
 if __name__ == '__main__':
