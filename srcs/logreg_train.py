@@ -1,13 +1,13 @@
 import copy
-
-from pkgs.parsing import check_input
-from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
-from pkgs.data_splitter import data_splitter
-from pkgs.other_metrics import accuracy_score_, f1_score_
-from pkgs.weights import save_weights
-import pandas as pd
-import numpy as np
 import sys
+
+import numpy as np
+import pandas as pd
+from pkgs.data_splitter import data_splitter
+from pkgs.my_logistic_regression import MyLogisticRegression as MyLogR
+from pkgs.other_metrics import accuracy_score_, f1_score_
+from pkgs.parsing import check_input
+from pkgs.weights import save_weights
 
 FEATURES = [
     "Arithmancy",
