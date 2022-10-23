@@ -32,9 +32,8 @@ TARGET_COLUMN = "Hogwarts House"
 # ]
 
 
-def combine_models(
-    models: list[MyLogR], x_test: np.ndarray, y_test: np.ndarray, houses_dict: dict
-):
+def combine_models(models: list[MyLogR], x_test: np.ndarray,
+                   y_test: np.ndarray, houses_dict: dict):
     predict_together = np.hstack([m.predict_(x_test) for m in models])
     # for i in range(len(models)):
     # 	print(predict_together[i][0])
@@ -62,9 +61,9 @@ def harrypotter():
     for i, house in enumerate(unique_houses):
         # Train a model for each house (One vs All)
         print(f"Let's train model {i} for {house}")
-        model = MyLogR(
-            thetas=np.ones(shape=(len(FEATURES) + 1, 1)), alpha=0.0001, max_iter=20_000
-        )
+        model = MyLogR(thetas=np.ones(shape=(len(FEATURES) + 1, 1)),
+                       alpha=0.0001,
+                       max_iter=20_000)
         new_train_y = np.where(train_y == i, 1, 0)
         model.fit_(train_x, new_train_y)
         models.append(copy.deepcopy(model))

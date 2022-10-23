@@ -5,6 +5,7 @@ import numpy as np
 
 
 def accepts(*types):
+
     def check_accepts(f):
         if len(types) != f.__code__.co_argcount:
             return None
@@ -21,7 +22,8 @@ def accepts(*types):
 
 
 @accepts(np.ndarray, np.ndarray, float)
-def data_splitter(x: np.ndarray, y: np.ndarray, proportion: float) -> Tuple | None:
+def data_splitter(x: np.ndarray, y: np.ndarray,
+                  proportion: float) -> Tuple | None:
     """Splits the dataset (given by x and y) into a training and a test set,
     while respecting the given proportion of examples to be kept in the training set.
     Args:
@@ -38,7 +40,8 @@ def data_splitter(x: np.ndarray, y: np.ndarray, proportion: float) -> Tuple | No
             This function should not raise any Exception.
     """
     if x.shape[0] != y.shape[0]:
-        print(f"Why are you giving me arrays of differing sizes?", file=sys.stderr)
+        print(f"Why are you giving me arrays of differing sizes?",
+              file=sys.stderr)
         return
     # rng_state = np.random.get_state()
     # np.random.shuffle(x)

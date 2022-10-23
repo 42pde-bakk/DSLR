@@ -2,6 +2,7 @@ import numpy as np
 
 
 def accepts(*types):
+
     def check_accepts(f):
         if len(types) != f.__code__.co_argcount:
             return None
@@ -18,22 +19,30 @@ def accepts(*types):
 
 
 # noinspection PyTypeChecker
-def true_positives(y: np.ndarray, y_hat: np.ndarray, pos_label: int = 1) -> int:
+def true_positives(y: np.ndarray,
+                   y_hat: np.ndarray,
+                   pos_label: int = 1) -> int:
     return np.sum((y == pos_label) & (y_hat == pos_label))
 
 
 # noinspection PyTypeChecker
-def true_negatives(y: np.ndarray, y_hat: np.ndarray, pos_label: int = 1) -> int:
+def true_negatives(y: np.ndarray,
+                   y_hat: np.ndarray,
+                   pos_label: int = 1) -> int:
     return np.sum((y != pos_label) & (y_hat != pos_label))
 
 
 # noinspection PyTypeChecker
-def false_positives(y: np.ndarray, y_hat: np.ndarray, pos_label: int = 1) -> int:
+def false_positives(y: np.ndarray,
+                    y_hat: np.ndarray,
+                    pos_label: int = 1) -> int:
     return np.sum((y != pos_label) & (y_hat == pos_label))
 
 
 # noinspection PyTypeChecker
-def false_negatives(y: np.ndarray, y_hat: np.ndarray, pos_label: int = 1) -> int:
+def false_negatives(y: np.ndarray,
+                    y_hat: np.ndarray,
+                    pos_label: int = 1) -> int:
     return np.sum((y == pos_label) & (y_hat != pos_label))
 
 

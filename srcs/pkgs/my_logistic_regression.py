@@ -2,6 +2,7 @@ import numpy as np
 
 
 def accepts(*types):
+
     def check_accepts(f):
         if len(types) != f.__code__.co_argcount:
             return None
@@ -23,14 +24,12 @@ class MyLogisticRegression:
     If a function has the __ prefix, it means that it assumes the x value has a column of ones already...
     """
 
-    def __init__(
-        self, thetas: np.ndarray, alpha: float = 0.005, max_iter: int = 10_000
-    ):
-        if (
-            not isinstance(thetas, np.ndarray)
-            or not isinstance(alpha, float)
-            or not isinstance(max_iter, int)
-        ):
+    def __init__(self,
+                 thetas: np.ndarray,
+                 alpha: float = 0.005,
+                 max_iter: int = 10_000):
+        if (not isinstance(thetas, np.ndarray) or not isinstance(alpha, float)
+                or not isinstance(max_iter, int)):
             raise TypeError("Bad arguments given to MyLogisticRegression")
         self.alpha = alpha
         self.max_iter = max_iter
@@ -86,9 +85,9 @@ class MyLogisticRegression:
 
     @staticmethod
     @accepts(np.ndarray, np.ndarray, float)
-    def loss_elem_(
-        y: np.ndarray, y_hat: np.ndarray, eps: float = 1e-15
-    ) -> np.ndarray | None:
+    def loss_elem_(y: np.ndarray,
+                   y_hat: np.ndarray,
+                   eps: float = 1e-15) -> np.ndarray | None:
         """
         :param y: Actual values as an np.ndarray
         :param y_hat: Predicted values as an np.ndarray
