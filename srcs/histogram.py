@@ -25,8 +25,7 @@ def lowest_std_std(course_list: set, courses: dict, houses: dict) -> Tuple[pd.Da
 		row = {h: courses[h][c].getvalue('Std') for h in houses}
 		row['Course'] = c
 		row['Average'] = std_of_stds
-		df = df.append(row, ignore_index=True)
-
+		df = pd.concat([df, pd.DataFrame.from_records([row])])
 	df = df.sort_values(by='Average')
 	return df, ret
 
